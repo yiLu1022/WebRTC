@@ -1,0 +1,27 @@
+#Gradle, AndroidStudio
+.hg
+.hgignore
+local.properties
+build
+apk_binaries
+.gradle/
+.idea/
+jniLibs
+armeabi
+arm64-v8a
+armeabi-v7a
+x86
+x86_64
+obj
+*.iml
+bin
+CropImage/src/main/gen
+StickyListHeaders/gen
+
+
+.crashlytics_data
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
+
+
+weartest
