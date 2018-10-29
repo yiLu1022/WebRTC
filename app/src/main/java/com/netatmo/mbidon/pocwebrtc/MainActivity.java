@@ -171,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
         videoRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_BALANCED);
         videoRenderer.setZOrderMediaOverlay(true);
 
-
         pushDispatcher.setDefaultHandler(new PushHandler() {
             @Override
             public void handlePush(@Nullable final String pushType, @NonNull final Bundle data) {
@@ -183,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
                         Logger.i(data.getString("extra_params"));
                         Logger.i("WOLO : " + pushType);
                         switch (pushType) {
-                            case "rtc_message":
+                            case "rtc":
+                                CallActivity.startActivity(MainActivity.this);
                                 try {
                                     jsonRTC = new JSONObject(data.getString("extra_params"));
                                     rtcMessage = RtcDataHelper.parseRtcMessage(jsonRTC.getString("data"));

@@ -38,6 +38,9 @@
         <activity android:name=".MainActivity">
         </activity>
 
+        <activity android:name=".CallActivity">
+        </activity>
+
         <activity android:name=".WebRtcActivity">
         </activity>
 
