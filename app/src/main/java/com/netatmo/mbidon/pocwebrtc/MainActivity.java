@@ -31,6 +31,7 @@ import com.netatmo.websocket.WebSocketManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.webrtc.AudioProcessingFactory;
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
 import org.webrtc.Camera1Capturer;
@@ -40,11 +41,13 @@ import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
 import org.webrtc.DataChannel;
 import org.webrtc.EglBase;
+import org.webrtc.FecControllerFactoryFactoryInterface;
 import org.webrtc.FileVideoCapturer;
 import org.webrtc.IceCandidate;
 import org.webrtc.Logging;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
+import org.webrtc.MediaTransportFactoryFactory;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RendererCommon;
@@ -60,6 +63,7 @@ import org.webrtc.VideoEncoderFactory;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
+import org.webrtc.audio.AudioDeviceModule;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -257,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private VideoTrack createVideoTrack(VideoCapturer capturer) {
+
         videoSource = factory.createVideoSource(capturer);
         capturer.startCapture(800, 448, 30);
 
@@ -280,6 +285,10 @@ public class MainActivity extends AppCompatActivity {
 
         final VideoEncoderFactory encoderFactory;
         final VideoDecoderFactory decoderFactory;
+        final AudioDeviceModule audioDeviceModule = null;
+        final AudioProcessingFactory audioProcessingFactory = null;
+        final FecControllerFactoryFactoryInterface fecControllerFactoryFactoryInterface = null;
+        final MediaTransportFactoryFactory mediaTransportFactoryFactory = null;
 
         encoderFactory = new SoftwareVideoEncoderFactory();
         decoderFactory = new SoftwareVideoDecoderFactory();
@@ -288,7 +297,16 @@ public class MainActivity extends AppCompatActivity {
                 PeerConnectionFactory.InitializationOptions.builder(this)
                         .createInitializationOptions());
 
-        factory = new PeerConnectionFactory(options, encoderFactory, decoderFactory);
+        factory = PeerConnectionFactory.builder()
+                .setOptions(options)
+                .setAudioDeviceModule(audioDeviceModule)
+                .setVideoEncoderFactory(encoderFactory)
+                .setVideoDecoderFactory(decoderFactory)
+                .setAudioProcessingFactory(audioProcessingFactory)
+                .setFecControllerFactoryFactoryInterface(fecControllerFactoryFactoryInterface)
+                .setMediaTransportFactoryFactory(mediaTransportFactoryFactory)
+                .createPeerConnectionFactory();
+
 
         PeerConnection.RTCConfiguration rtcConfig =
                 new PeerConnection.RTCConfiguration(new ArrayList<>());
